@@ -7,6 +7,10 @@ import gsap from "gsap";
 import * as THREE from "three";
 import { OrbitControls } from "@react-three/drei";
 
+interface Camera extends THREE.PerspectiveCamera {
+  fov: number;
+}
+
 function SpinningBox() {
   const ref = useRef<THREE.Mesh>(null!);
 
@@ -38,64 +42,65 @@ function CameraAnimator({
   onAnimationComplete: () => void;
 }) {
   const { camera } = useThree();
+const myCamera  = camera as Camera; // Type assertion to Camera
 
   // Optional Leva controls for tweaking in real time
   useControls("Camera", {
     camX: {
-      value: camera.position.x,
+      value: myCamera.position.x,
       step: 0.1,
-      onChange: (v) => (camera.position.x = v),
+      onChange: (v) => (myCamera.position.x = v),
     },
     camY: {
-      value: camera.position.y,
+      value: myCamera.position.y,
       step: 0.1,
-      onChange: (v) => (camera.position.y = v),
+      onChange: (v) => (myCamera.position.y = v),
     },
     camZ: {
-      value: camera.position.z,
+      value: myCamera.position.z,
       step: 0.1,
-      onChange: (v) => (camera.position.z = v),
+      onChange: (v) => (myCamera.position.z = v),
     },
     fov: {
-      value: camera?.fov,
+      value: myCamera?.fov,
       step: 1,
       onChange: (v) => {
-        camera.fov = v;
-        camera.updateProjectionMatrix();
+        myCamera.fov = v;
+        myCamera.updateProjectionMatrix();
       },
     },
   });
 
   useEffect(() => {
-    camera.position.set(-10, 4, -8.3);
-    camera.fov = 38;
-    camera.updateProjectionMatrix();
+    myCamera.position.set(-10, 4, -8.3);
+    myCamera.fov = 38;
+    myCamera.updateProjectionMatrix();
 
     const tl = gsap.timeline({ delay: 1 });
 
-    tl.to(camera.position, {
+    tl.to(myCamera.position, {
       x: -5.4,
       y: 1.8,
       z: -0.5,
       duration: 3,
       ease: "power2.inOut",
     }).to(
-      camera,
+      myCamera,
       {
         fov: 28,
         duration: 3,
         ease: "power2.inOut",
-        onUpdate: () => camera.updateProjectionMatrix(),
+        onUpdate: () => myCamera.updateProjectionMatrix(),
         onComplete: () => {
           onAnimationComplete(); // Notify when animation is done
         },
       },
       "<"
     );
-  }, [camera, onAnimationComplete]);
+  }, [myCamera]);
 
   useFrame(() => {
-    camera.lookAt(0, 1, 0); // Focus on the spinning box
+    myCamera.lookAt(0, 1, 0); // Focus on the spinning box
   });
 
   return null;
