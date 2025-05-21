@@ -1,0 +1,16 @@
+.blackGradient {
+  background: linear-gradient(rgba(18, 18, 18, 0) 0%, rgb(16, 16, 16) 96%);
+  border-radius: 0px;
+  opacity: 1;
+  flex: none;
+  height: 100%;
+  left: 0px;
+  mix-blend-mode: multiply;
+  overflow: hidden;
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  width: 100%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
