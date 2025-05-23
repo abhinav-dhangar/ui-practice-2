@@ -120,3 +120,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+.centered {
+  position: absolute; /* or 'fixed' for viewport-centering */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
